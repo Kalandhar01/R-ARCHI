@@ -458,7 +458,7 @@ export const footerContent = {
       { label: "Works", href: "/#works" },
       { label: "Consultation", href: "/#architecture-consultation-desk" },
       { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Terms & Conditions", href: "/privacy-policy" }
+      { label: "Terms & Conditions", href: "/terms-and-conditions" }
     ]
   },
   locations: {

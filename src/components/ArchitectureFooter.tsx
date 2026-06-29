@@ -250,6 +250,8 @@ export default function ArchitectureFooter() {
             <span className="arch-journal-footer-company-detail-sep">•</span>
             <span className="arch-journal-footer-company-detail">Incorporated: Nov 06, 2025</span>
             <span className="arch-journal-footer-company-detail-sep">•</span>
+            <span className="arch-journal-footer-company-detail">Status: Active</span>
+            <span className="arch-journal-footer-company-detail-sep">•</span>
             <a
               href="https://tracxn.com/d/legal-entities/india/ractysh-design-private-limited/__wYKN9FzKxIUChv7teK_9gFmjjcAXVmfRWBNG_gOKfYQ"
               target="_blank"
@@ -258,6 +260,16 @@ export default function ArchitectureFooter() {
             >
               Tracxn Verified ✓
             </a>
+          </div>
+          <div className="arch-journal-footer-company-details arch-journal-footer-company-details-secondary">
+            <span className="arch-journal-footer-company-detail">Authorised Capital: ₹1,00,000</span>
+            <span className="arch-journal-footer-company-detail-sep">•</span>
+            <span className="arch-journal-footer-company-detail">Paid-up Capital: ₹40,000</span>
+            <span className="arch-journal-footer-company-detail-sep">•</span>
+            <span className="arch-journal-footer-company-detail">Directors: Shaiknoordeen Noorul Fawaz, Naveen</span>
+          </div>
+          <div className="arch-journal-footer-company-details arch-journal-footer-company-details-secondary">
+            <span className="arch-journal-footer-company-detail">Registered Office: D.no.236a, K. K. N. Patty, Palani, Dindigul, Tamil Nadu, India &mdash; 624601</span>
           </div>
         </motion.div>
 

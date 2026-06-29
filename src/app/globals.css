@@ -7602,6 +7602,11 @@ body {
   color: rgba(184, 147, 79, 0.9);
 }
 
+.architecture-site .arch-journal-footer-company-details-secondary {
+  margin-top: 0.4rem;
+  align-items: baseline;
+}
+
 @media (min-width: 768px) {
   .architecture-site .arch-journal-footer-company-details {
     font-size: 0.72rem;
@@ -7609,6 +7614,10 @@ body {
 
   .architecture-site .arch-journal-footer-company-info .arch-journal-footer-legal-link {
     font-size: 0.72rem;
+  }
+
+  .architecture-site .arch-journal-footer-company-details-secondary {
+    margin-top: 0.5rem;
   }
 }
 
