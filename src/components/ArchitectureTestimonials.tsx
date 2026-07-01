@@ -8,7 +8,6 @@ import { OptimizedImage as Image } from "@/components/OptimizedImage";
 import { testimonialsContent } from "@/lib/architecturePremiumContent";
 import { gsap, registerGsapPlugins } from "@/lib/gsap-client";
 
-// Add images and metadata to the content
 const enhancedTestimonials = testimonialsContent.items.map((item, idx) => {
   const images = [
     "/images/architecture/ractysh-laterite-court-residence.avif",
@@ -206,7 +205,7 @@ export function ArchitectureTestimonials() {
   const progressRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
-  const AUTOPLAY_DURATION = 8000; // 8 seconds
+  const AUTOPLAY_DURATION = 8000;
 
   const nextSlide = useCallback(() => {
     setDirection(1);
@@ -218,7 +217,6 @@ export function ArchitectureTestimonials() {
     setCurrentIndex((prev) => (prev - 1 + enhancedTestimonials.length) % enhancedTestimonials.length);
   }, []);
 
-  // Autoplay Logic
   useEffect(() => {
     const currentProgress = progressRef.current;
 
@@ -256,7 +254,6 @@ export function ArchitectureTestimonials() {
     const y = (clientY - top) / height - 0.5;
     setMousePos({ x, y });
 
-    // 3D Tilt for Card
     if (cardRef.current) {
       gsap.to(cardRef.current, {
         rotateY: x * 8,
@@ -303,8 +300,8 @@ export function ArchitectureTestimonials() {
         }}
       />
       
-      <div className="relative z-10 mx-auto max-w-[1400px] px-5 py-20 sm:px-8 sm:py-32 lg:px-12 lg:py-48">
-        <header className="mb-16 lg:mb-32">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20">
+        <header className="mb-10 lg:mb-16">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 lg:gap-16">
             <motion.div
               initial="hidden"
@@ -338,10 +335,9 @@ export function ArchitectureTestimonials() {
 
         <div 
           ref={cardRef}
-          className="relative flex flex-col md:block h-auto md:h-[620px] lg:h-[540px] w-full lg:max-w-[1180px] lg:mx-auto overflow-hidden rounded-[1.25rem] md:rounded-[2rem] border border-nearblack/5 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.12)] bg-nearblack transition-shadow duration-700 hover:shadow-[0_44px_100px_-24px_rgba(0,0,0,0.18)]"
+          className="relative h-auto w-full lg:max-w-[1180px] lg:mx-auto overflow-hidden rounded-[1.25rem] md:rounded-[2rem] border border-nearblack/5 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.12)] bg-nearblack transition-shadow duration-700 hover:shadow-[0_44px_100px_-24px_rgba(0,0,0,0.18)]"
           style={{ perspective: "2000px" }}
         >
-          {/* Card-specific spotlight */}
           <motion.div 
             className="pointer-events-none absolute inset-0 z-50 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
             animate={{ 
@@ -349,161 +345,8 @@ export function ArchitectureTestimonials() {
             }}
           />
 
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative md:absolute md:inset-0 order-2 md:order-none grid grid-cols-1 lg:grid-cols-[44%_56%]"
-            >
-              {/* Left Side: Image with advanced parallax & zoom */}
-              <div className="block relative h-56 sm:h-64 md:h-[36%] lg:h-full w-full overflow-hidden">
-                <motion.div 
-                  initial={{ scale: 1.15, x: direction * 40 }}
-                  animate={{ scale: 1, x: 0 }}
-                  exit={{ scale: 1.15, x: -direction * 40 }}
-                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="h-full w-full relative"
-                  style={{ 
-                    x: reduceMotion ? 0 : mousePos.x * -40,
-                    y: reduceMotion ? 0 : mousePos.y * -40,
-                  }}
-                >
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.role}
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </motion.div>
-                <div className="absolute inset-0 bg-nearblack/20" />
-                
-                {/* Floating Image Mask Reveal for entry */}
-                <motion.div 
-                  initial={{ scaleY: 1 }}
-                  whileInView={{ scaleY: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                  className="absolute inset-0 bg-white z-20 origin-top"
-                />
-
-                <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8 text-white z-20 hidden lg:block overflow-hidden">
-                  <motion.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <p className="text-[0.55rem] font-bold uppercase tracking-[0.4em] text-white/60">Featured Project</p>
-                    <p className="mt-2 font-display text-lg font-light tracking-tight">{testimonial.category}</p>
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Right Side: Content with line-by-line reveal */}
-              <div className="relative flex flex-col justify-center bg-nearblack p-6 md:p-12 lg:p-16 text-white overflow-hidden">
-                {/* Decorative depth element */}
-                <motion.div 
-                  className="absolute -right-10 -top-10 md:-right-16 md:-top-16 text-[9rem] md:text-[16rem] font-display text-white/[0.02] leading-none pointer-events-none"
-                  style={{ 
-                    x: reduceMotion ? 0 : mousePos.x * 60,
-                    y: reduceMotion ? 0 : mousePos.y * 60,
-                  }}
-                >
-                  &ldquo;
-                </motion.div>
-
-                <div className="relative z-10">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    transition={{ duration: 1, ease: "backOut" }}
-                  >
-                    <Quote className="h-8 w-8 md:h-12 md:w-12 text-executive-red mb-5 md:mb-8" />
-                  </motion.div>
-                  
-                  <div className="min-h-[120px] md:min-h-[200px]">
-                    <p className="font-display text-lg md:text-2xl lg:text-[1.875rem] font-light leading-[1.35] tracking-tight text-white/95">
-                      <LineReveal text={`"${testimonial.quote}"`} delay={0.2} />
-                    </p>
-                  </div>
-
-                  <div className="mt-6 md:mt-10 space-y-6 md:space-y-7">
-                    <div className="overflow-hidden">
-                      <div className="space-y-2">
-                        <p className="font-display text-lg md:text-2xl font-light tracking-tight">
-                          <CharacterReveal text={testimonial.author} delay={1} />
-                        </p>
-                        <motion.div 
-                          className="flex items-center gap-3"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.8, delay: 1.3 }}
-                        >
-                          <div className="h-px w-4 md:h-px md:w-5 bg-executive-red" />
-                          <p className="text-[0.55rem] md:text-[0.62rem] font-bold uppercase tracking-[0.28em] text-executive-red line-clamp-1">{testimonial.role}</p>
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-6 md:gap-10 border-t border-white/10 pt-6 md:pt-7">
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1.5 }}
-                      >
-                        <p className="text-[0.55rem] md:text-[0.58rem] font-bold uppercase tracking-[0.25em] text-white/40 mb-1 md:mb-1.5">Context</p>
-                        <p className="text-[0.7rem] md:text-xs font-medium tracking-wide truncate">{testimonial.location}</p>
-                      </motion.div>
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1.6 }}
-                      >
-                        <p className="text-[0.55rem] md:text-[0.58rem] font-bold uppercase tracking-[0.25em] text-white/40 mb-1 md:mb-1.5">Delivered</p>
-                        <p className="text-[0.7rem] md:text-xs font-medium tracking-wide truncate">{testimonial.year}</p>
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation Controls */}
-          <div className="relative order-3 md:order-none md:absolute md:bottom-8 md:right-8 z-[60] flex items-center justify-end gap-3 md:gap-4 px-6 pb-6 md:p-0">
-            <div className="hidden md:flex gap-3">
-              <MagneticButton onClick={prevSlide} direction="prev">
-                Previous
-              </MagneticButton>
-              <MagneticButton onClick={nextSlide} direction="next">
-                Next Story
-              </MagneticButton>
-            </div>
-            {/* Mobile Controls: Compact & Accessible */}
-            <div className="flex md:hidden gap-2 bg-nearblack/40 backdrop-blur-xl p-1.5 rounded-full border border-white/10">
-               <button 
-                 onClick={prevSlide} 
-                 className="p-3 rounded-full bg-white/5 border border-white/10 text-white active:scale-95 transition-transform"
-                 aria-label="Previous story"
-               >
-                 <ArrowLeft size={16}/>
-               </button>
-               <button 
-                 onClick={nextSlide} 
-                 className="p-3 rounded-full bg-executive-red/20 border border-executive-red/40 text-white active:scale-95 transition-transform"
-                 aria-label="Next story"
-               >
-                 <ArrowRight size={16}/>
-               </button>
-            </div>
-          </div>
-
-          {/* Slide Indicator with Progress Bars: Moved to Top Right for Mobile Visibility */}
-          <div className="relative order-1 md:order-none md:absolute md:top-8 md:left-8 lg:left-auto lg:right-8 z-[60] flex items-center gap-3 md:gap-4 px-6 pt-6 md:p-0">
+          {/* Indicator: in-flow on mobile, absolute on desktop */}
+          <div className="relative md:absolute md:top-8 md:left-8 lg:left-auto lg:right-8 z-[60] flex items-center gap-3 md:gap-4 px-6 pt-6 pb-3 md:p-0">
             <span className="font-display text-[9px] md:text-xs text-white/40 tracking-widest">
               {String(currentIndex + 1).padStart(2, '0')} / {String(enhancedTestimonials.length).padStart(2, '0')}
             </span>
@@ -526,6 +369,107 @@ export function ArchitectureTestimonials() {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Grid: image + content */}
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="grid grid-cols-1 lg:grid-cols-[44%_56%]"
+            >
+              {/* Left Side: Image */}
+              <div className="block relative h-56 sm:h-64 md:h-72 lg:h-full w-full overflow-hidden">
+                <motion.div 
+                  initial={{ scale: 1.15, x: direction * 40 }}
+                  animate={{ scale: 1, x: 0 }}
+                  exit={{ scale: 1.15, x: -direction * 40 }}
+                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="h-full w-full relative"
+                  style={{ 
+                    x: reduceMotion ? 0 : mousePos.x * -40,
+                    y: reduceMotion ? 0 : mousePos.y * -40,
+                  }}
+                >
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.role}
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
+                <div className="absolute inset-0 bg-nearblack/20" />
+                
+                <motion.div 
+                  initial={{ scaleY: 1 }}
+                  whileInView={{ scaleY: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                  className="absolute inset-0 bg-white z-20 origin-top"
+                />
+
+                <div className="absolute bottom-5 left-5 md:bottom-8 md:left-8 text-white z-20 hidden lg:block overflow-hidden">
+                  <motion.div
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <p className="text-[0.55rem] font-bold uppercase tracking-[0.4em] text-white/60">Featured Project</p>
+                    <p className="mt-2 font-display text-lg font-light tracking-tight">{testimonial.category}</p>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Right Side: Testimonial Quote */}
+              <div className="bg-nearblack p-6 md:p-12 lg:p-16 text-white">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  transition={{ duration: 1, ease: "backOut" }}
+                >
+                  <Quote className="h-8 w-8 md:h-12 md:w-12 text-executive-red mb-5 md:mb-8" />
+                </motion.div>
+
+                <div>
+                  <p className="font-display text-lg md:text-2xl lg:text-[1.875rem] font-light leading-[1.35] tracking-tight text-white/95">
+                    <LineReveal text={`"${testimonial.quote}"`} delay={0.2} />
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation: in-flow on mobile, absolute on desktop */}
+          <div className="relative md:absolute md:bottom-8 md:right-8 z-[60] flex items-center justify-end gap-3 md:gap-4 px-6 pt-3 pb-6 md:p-0">
+            <div className="hidden md:flex gap-3">
+              <MagneticButton onClick={prevSlide} direction="prev">
+                Previous
+              </MagneticButton>
+              <MagneticButton onClick={nextSlide} direction="next">
+                Next Story
+              </MagneticButton>
+            </div>
+            <div className="flex md:hidden gap-2 bg-nearblack/40 backdrop-blur-xl p-1.5 rounded-full border border-white/10">
+               <button 
+                 onClick={prevSlide} 
+                 className="p-3 rounded-full bg-white/5 border border-white/10 text-white active:scale-95 transition-transform"
+                 aria-label="Previous story"
+               >
+                 <ArrowLeft size={16}/>
+               </button>
+               <button 
+                 onClick={nextSlide} 
+                 className="p-3 rounded-full bg-executive-red/20 border border-executive-red/40 text-white active:scale-95 transition-transform"
+                 aria-label="Next story"
+               >
+                 <ArrowRight size={16}/>
+               </button>
             </div>
           </div>
         </div>

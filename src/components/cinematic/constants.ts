@@ -218,7 +218,7 @@ export const navScrollDuration = 1.35;
 export const navScrollEase = (time: number) =>
   time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2;
 
-export const architectureFooterColumns = [footerContent.studio, footerContent.services, footerContent.locations, footerContent.contact] as const;
+export const architectureFooterColumns = [footerContent.studio, footerContent.services, footerContent.company, footerContent.legal, footerContent.locations, footerContent.contact] as const;
 export const architectureFooterStatement = ["Built Beyond", "Blueprints.", "Designed to Endure."] as const;
 
 export { heroSupportingContent };

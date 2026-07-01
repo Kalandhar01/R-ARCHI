@@ -7658,6 +7658,13 @@ body {
   }
 }
 
+@media (min-width: 1024px) {
+  .architecture-site .arch-journal-footer-columns,
+  .architecture-site .arch-journal-footer-strip {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1023px) {
   .architecture-site .arch-journal-footer-statement {
     font-size: clamp(2.5rem, 8vw, 4.4rem);

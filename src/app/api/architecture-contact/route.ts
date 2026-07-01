@@ -31,7 +31,7 @@ function brandUrl(): string {
     absoluteUrl(process.env.SITE_URL) ||
     absoluteUrl(process.env.PUBLIC_SITE_URL) ||
     absoluteUrl(process.env.WEB_ORIGIN) ||
-    "http://localhost:3000"
+    "https://www.ractysh.com"
   );
 }
 
@@ -144,7 +144,7 @@ function notificationHtml({
           </td></tr>
           <tr><td class="mobile-pad" align="center" style="padding:28px 42px 34px;border-top:1px solid #E7E2D9;background:#FFFFFF">
             <p style="margin:0;color:#111111;font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;line-height:25px">Ractysh Group</p>
-            <a href="${escapeHtml(websiteUrl)}" style="display:inline-block;margin-top:12px;color:#8F1118;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;text-decoration:none">${escapeHtml(websiteUrl)}</a>
+            <a href="https://www.ractysh.com" style="display:inline-block;margin-top:12px;color:#8F1118;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;text-decoration:none">www.ractysh.com</a>
           </td></tr>
         </table>
       </td></tr>
@@ -294,6 +294,18 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Auto-reply to submitter (fire-and-forget)
+    fetch(RESEND_EMAILS_API, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM_EMAIL || "RACTYSH Design Private Limited <onboarding@resend.dev>",
+        to: payload.email,
+        subject: `Thank You, ${payload.name} — RACTYSH Design`,
+        html: renderAutoReplyHtml(payload.name, payload.projectType || null),
+      })
+    }).catch((err) => console.error("[architecture-contact] Auto-reply failed:", err));
+
     return NextResponse.json(
       {
         success: true,
@@ -318,6 +330,47 @@ export async function POST(request: NextRequest) {
       { status: 503 },
     );
   }
+}
+
+function renderAutoReplyHtml(name: string, serviceType: string | null): string {
+  const serviceInfo = serviceType
+    ? `<tr><td style="padding:0 0 12px;font-size:15px;line-height:22px;color:#62584e"><span style="font-weight:600;color:#20130f">Service Interested:</span> ${escapeHtml(serviceType)}</td></tr>`
+    : "";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Thank You — RACTYSH Design</title></head>
+<body style="margin:0;padding:0;background-color:#f8f3ea;font-family:Georgia,'Times New Roman',serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f3ea">
+<tr><td align="center" style="padding:40px 16px">
+<table role="presentation" width="540" cellpadding="0" cellspacing="0" style="max-width:540px;width:100%">
+<tr><td style="background:linear-gradient(135deg,#0a0806,#1c120e);border-radius:12px 12px 0 0;padding:32px 40px 24px;text-align:center">
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto">
+<tr><td style="font-size:28px;font-weight:700;letter-spacing:2px;color:#d9bd7a;font-family:Georgia,'Times New Roman',serif">RACTYSH</td></tr>
+<tr><td style="font-size:11px;font-weight:400;letter-spacing:4px;color:#d9bd7a;padding-top:4px;text-transform:uppercase">Design Private Limited</td></tr>
+</table></td></tr>
+<tr><td style="background-color:#ffffff;padding:40px 40px 32px;border-left:1px solid #e8ddca;border-right:1px solid #e8ddca">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<tr><td style="font-size:28px;font-weight:700;color:#20130f;padding-bottom:8px;font-family:Georgia,'Times New Roman',serif">Thank You, ${escapeHtml(name)}</td></tr>
+<tr><td style="height:3px;width:48px;background-color:#d9bd7a;margin:0 0 24px;display:block"></td></tr>
+<tr><td style="font-size:16px;line-height:26px;color:#62584e;padding-bottom:16px">We have received your inquiry. A member of our design studio will reach out within <strong style="color:#20130f">24–48 business hours</strong>.</td></tr>
+${serviceInfo}
+</table></td></tr>
+<tr><td style="background-color:#fcf9f4;padding:32px 40px;border-left:1px solid #e8ddca;border-right:1px solid #e8ddca">
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+<tr><td style="font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#8b1118;padding-bottom:16px;text-align:center;font-family:Arial,Helvetica,sans-serif">Explore RACTYSH</td></tr>
+<tr><td style="padding:4px 0"><a href="https://www.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH GROUP</a> <span style="color:#8b6f28;font-size:12px">— Parent Enterprise</span></td></tr>
+<tr><td style="padding:4px 0"><a href="https://architects.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH Design</a> <span style="color:#8b6f28;font-size:12px">— Architecture & Interiors</span></td></tr>
+<tr><td style="padding:4px 0"><a href="https://construction.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH Infra</a> <span style="color:#8b6f28;font-size:12px">— Construction & Engineering</span></td></tr>
+<tr><td style="padding:4px 0"><a href="https://estates.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH Real Estate</a> <span style="color:#8b6f28;font-size:12px">— Premium Properties</span></td></tr>
+<tr><td style="padding:4px 0"><a href="https://exports.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH Exim</a> <span style="color:#8b6f28;font-size:12px">— Global Trade</span></td></tr>
+<tr><td style="padding:4px 0"><a href="https://exchange.ractysh.com" style="color:#20130f;text-decoration:none;font-size:15px;font-weight:600">RACTYSH Associates</a> <span style="color:#8b6f28;font-size:12px">— OTC Exchange</span></td></tr>
+</table></td></tr>
+<tr><td style="background:linear-gradient(135deg,#0a0806,#1c120e);border-radius:0 0 12px 12px;padding:24px 40px;text-align:center">
+<p style="font-size:12px;line-height:18px;color:#9d8a74;margin:0;font-family:Arial,Helvetica,sans-serif">RACTYSH DESIGN PRIVATE LIMITED</p>
+<p style="font-size:11px;line-height:18px;color:#7a6a58;margin:4px 0 0;font-family:Arial,Helvetica,sans-serif">This is an automated acknowledgement.</p>
+</td></tr>
+</table></td></tr></table></body></html>`;
 }
 
 export function GET() {
